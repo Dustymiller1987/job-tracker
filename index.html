@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <main class="container">
+        <header class="page-header">
+            <a class="landing-brand" href="index.html">JobTracker</a>
+            <nav class="page-nav" aria-label="Main navigation">
+                <a href="index.html" aria-current="page">Dashboard</a>
+                <a href="add.html">Add application</a>
+                <a href="follow-ups.html">Add follow-up</a>
+                <a href="pages/profile.html">Profile</a>
+                <span id="userEmail"></span>
+                <button class="nav-logout" type="button" onclick="logout()">Logout</button>
+            </nav>
+        </header>
+
+        <section class="dashboard-summary" aria-labelledby="dashboardHeading">
+            <div class="dashboard-summary-heading">
+                <div>
+                    <h2 id="dashboardHeading">Dashboard</h2>
+                    <p>Total applications: <strong id="applicationCount">0</strong></p>
+                </div>
+                <div class="dashboard-actions">
+                    <a class="button-link" href="add.html">Add application</a>
+                    <a class="button-link" href="follow-ups.html">Add follow-up</a>
+                </div>
+            </div>
+            <div id="stats" class="stats-grid" aria-live="polite"></div>
+            <p id="applicationLoadMessage" class="application-load-message" role="status" aria-live="polite"></p>
+        </section>
+
+        <section aria-labelledby="pipelineHeading">
+            <h2 id="pipelineHeading">Application pipeline</h2>
+            <div class="kanban-board" id="kanbanBoard"></div>
+        </section>
+
+        <section class="follow-up-section" aria-labelledby="dashboardFollowUpHeading">
+            <h2 id="dashboardFollowUpHeading">Scheduled follow-ups</h2>
+            <p id="followUpCount" aria-live="polite">0 scheduled</p>
+            <div id="followUpList" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

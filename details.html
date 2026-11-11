@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Details</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="container">
+        <p><a class="button-link" href="index.html">Dashboard</a></p>
+        <section id="applicationDetails" aria-live="polite"></section>
+        <form id="statusForm" hidden>
+            <label for="applicationStatus">Update status</label>
+            <select id="applicationStatus" required>
+                <option value="Interested">Interested</option>
+                <option value="Applied">Applied</option>
+                <option value="Interview">Interview</option>
+                <option value="Final Interview">Final Interview</option>
+                <option value="Offer">Offer</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+            <button type="submit">Update Status</button>
+        </form>
+
+        <section id="interviewHistorySection" hidden>
+            <h2>Interview history</h2>
+            <div id="interviewHistory" aria-live="polite"></div>
+            <form id="interviewHistoryForm">
+                <label for="interviewNotes">Add interview notes</label>
+                <textarea id="interviewNotes" placeholder="Add interview dates, stages, people you met, and outcomes" required></textarea>
+                <button type="submit">Add to Interview History</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="js/details.js"></script>
+</body>
+</html>

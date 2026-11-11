@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Application</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="container">
+        <header class="page-header">
+            <a class="landing-brand" href="index.html">JobTracker</a>
+            <nav class="page-nav" aria-label="Main navigation">
+                <a href="index.html">Dashboard</a>
+                <a href="add.html" aria-current="page">Add application</a>
+                <a href="follow-ups.html">Add follow-up</a>
+                <a href="pages/profile.html">Profile</a>
+                <span id="userEmail"></span>
+                <button class="nav-logout" type="button" onclick="logout()">Logout</button>
+            </nav>
+        </header>
+
+        <section aria-labelledby="addApplicationHeading">
+            <h1 id="addApplicationHeading" class="page-title">Add application</h1>
+            <form id="applicationForm">
+                <input type="text" id="companyName" placeholder="Company Name" required>
+                <input type="text" id="jobTitle" placeholder="Job Title" required>
+                <input type="text" id="salary" placeholder="Salary">
+                <input type="text" id="location" placeholder="Location">
+                <input type="url" id="jobUrl" placeholder="Job Posting URL">
+                <input type="text" id="contact" placeholder="Recruiter Name">
+                <label for="applicationDate">Application Closing Date</label>
+                <input type="date" id="applicationDate" required>
+                <select id="status" required>
+                    <option value="">Select Status</option>
+                    <option value="Interested">Interested</option>
+                    <option value="Applied">Applied</option>
+                </select>
+                <textarea id="notes" placeholder="Notes"></textarea>
+                <button type="submit">Add Application</button>
+                <p id="applicationSaveMessage" class="form-message" role="status" aria-live="polite"></p>
+            </form>
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

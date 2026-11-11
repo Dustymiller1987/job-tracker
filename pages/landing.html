@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Keep your job search organized with one clear view of applications, interviews, and follow-ups.">
+    <title>Job Application Tracker</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="landing-page">
+    <main class="landing-container">
+        <header class="landing-header">
+            <a class="landing-brand" href="landing.html">JobTracker</a>
+            <nav class="landing-nav" aria-label="Account navigation">
+                <a href="login.html">Log in</a>
+                <a class="landing-nav-cta" href="register.html">Create account</a>
+            </nav>
+        </header>
+
+        <section class="landing-hero" aria-labelledby="landingHeading">
+            <p class="landing-eyebrow">A clearer way to find your next role</p>
+            <h1 id="landingHeading">Your job search, <span>all in one place.</span></h1>
+            <p class="landing-description">
+                Organize applications, keep track of interview progress, and remember every follow-up
+                without juggling spreadsheets and sticky notes.
+            </p>
+            <div class="landing-hero-actions">
+                <a class="landing-primary-button" href="register.html">Get started</a>
+                <a class="landing-secondary-link" href="login.html">Already have an account? Log in</a>
+            </div>
+            <div class="landing-proof" aria-label="Dashboard benefits">
+                <span>Applications at a glance</span>
+                <span>Interview pipeline</span>
+                <span>Follow-ups in one view</span>
+            </div>
+        </section>
+
+        <section class="landing-preview" aria-labelledby="previewHeading">
+            <div class="landing-preview-heading">
+                <div>
+                    <p class="landing-eyebrow">A peek inside</p>
+                    <h2 id="previewHeading">A dashboard built for your job search</h2>
+                </div>
+                <p>See what needs attention and where every opportunity stands.</p>
+            </div>
+
+            <div class="dashboard-preview" aria-label="Preview of the application dashboard">
+                <header class="preview-page-header">
+                    <h3>Job Application Tracker</h3>
+                    <nav aria-label="Dashboard preview navigation">
+                        <span class="preview-current-link">Dashboard</span>
+                        <span>Add application</span>
+                        <span>Add follow-up</span>
+                    </nav>
+                </header>
+
+                <section class="preview-summary" aria-labelledby="previewDashboardHeading">
+                    <div class="preview-summary-heading">
+                        <div>
+                            <h3 id="previewDashboardHeading">Dashboard</h3>
+                            <p>Total applications: <strong>5</strong></p>
+                        </div>
+                        <div class="preview-actions">
+                            <span>Add application</span>
+                            <span>Add follow-up</span>
+                        </div>
+                    </div>
+                    <div class="stats-grid preview-stats">
+                        <article class="stat-card">
+                            <span class="stat-value">1</span>
+                            <span class="stat-label">Interested</span>
+                        </article>
+                        <article class="stat-card">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">Applied</span>
+                        </article>
+                        <article class="stat-card">
+                            <span class="stat-value">1</span>
+                            <span class="stat-label">Interviews</span>
+                        </article>
+                        <article class="stat-card">
+                            <span class="stat-value">1</span>
+                            <span class="stat-label">Offers</span>
+                        </article>
+                        <article class="stat-card">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Accepted</span>
+                        </article>
+                        <article class="stat-card">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Rejected</span>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="preview-pipeline" aria-labelledby="previewPipelineHeading">
+                    <h3 id="previewPipelineHeading">Application pipeline</h3>
+                    <div class="kanban-board preview-kanban">
+                        <article class="kanban-column">
+                            <h4>Interested</h4>
+                            <div class="kanban-cards">
+                                <div class="kanban-card">
+                                    <h5>Northstar Labs</h5>
+                                    <p><strong>Role:</strong> Product Designer</p>
+                                    <p><strong>Closing:</strong> Nov 18, 2026</p>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="kanban-column">
+                            <h4>Applied</h4>
+                            <div class="kanban-cards">
+                                <div class="kanban-card">
+                                    <h5>Brightside</h5>
+                                    <p><strong>Role:</strong> UX Researcher</p>
+                                    <p><strong>Date applied:</strong> Nov 4, 2026</p>
+                                </div>
+                                <div class="kanban-card">
+                                    <h5>Fieldwork</h5>
+                                    <p><strong>Role:</strong> Product Designer</p>
+                                    <p><strong>Date applied:</strong> Nov 2, 2026</p>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="kanban-column">
+                            <h4>Interview</h4>
+                            <div class="kanban-cards">
+                                <div class="kanban-card">
+                                    <h5>Juniper Health</h5>
+                                    <p><strong>Role:</strong> UX Designer</p>
+                                    <p><strong>Date applied:</strong> Oct 28, 2026</p>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="kanban-column">
+                            <h4>Final Interview</h4>
+                            <div class="kanban-cards">
+                                <div class="empty-column">No applications</div>
+                            </div>
+                        </article>
+                        <article class="kanban-column">
+                            <h4>Offer</h4>
+                            <div class="kanban-cards">
+                                <div class="kanban-card">
+                                    <h5>Cloudline</h5>
+                                    <p><strong>Role:</strong> Product Designer</p>
+                                    <p><strong>Date applied:</strong> Oct 20, 2026</p>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="kanban-column">
+                            <h4>Accepted offer</h4>
+                            <div class="kanban-cards">
+                                <div class="empty-column">No applications</div>
+                            </div>
+                        </article>
+                        <article class="kanban-column">
+                            <h4>Rejected</h4>
+                            <div class="kanban-cards">
+                                <div class="empty-column">No applications</div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="follow-up-section preview-follow-ups" aria-labelledby="previewFollowUpsHeading">
+                    <h3 id="previewFollowUpsHeading">Scheduled follow-ups</h3>
+                    <p>1 scheduled</p>
+                    <article class="follow-up-card">
+                        <h4>Send a thank-you note</h4>
+                        <p>Company: Juniper Health</p>
+                        <p>Date: Nov 12, 2026</p>
+                    </article>
+                </section>
+            </div>
+        </section>
+
+        <footer class="landing-footer">
+            <p>One step closer to your next opportunity.</p>
+            <a href="register.html">Create your account</a>
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase.js"></script>
+    <script>
+        async function redirectIfLoggedIn() {
+            const { data: { user }, error } = await supabaseClient.auth.getUser();
+            if (error && error.name !== "AuthSessionMissingError") {
+                console.error("Unable to verify the current user:", error);
+                return;
+            }
+            if (user) {
+                window.location.href = "../index.html";
+            }
+        }
+
+        redirectIfLoggedIn();
+    </script>
+</body>
+</html>

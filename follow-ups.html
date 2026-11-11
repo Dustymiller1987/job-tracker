@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Follow-up</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="container">
+        <header class="page-header">
+            <a class="landing-brand" href="index.html">JobTracker</a>
+            <nav class="page-nav" aria-label="Main navigation">
+                <a href="index.html">Dashboard</a>
+                <a href="add.html">Add application</a>
+                <a href="follow-ups.html" aria-current="page">Add follow-up</a>
+                <a href="pages/profile.html">Profile</a>
+                <span id="userEmail"></span>
+                <button class="nav-logout" type="button" onclick="logout()">Logout</button>
+            </nav>
+        </header>
+
+        <section class="follow-up-section" aria-labelledby="followUpHeading">
+            <h1 id="followUpHeading" class="page-title">Follow-ups</h1>
+            <h2>Schedule a follow-up or interview</h2>
+            <p id="followUpCount" aria-live="polite">0 scheduled</p>
+            <form id="followUpForm">
+                <label for="followUpTask">Follow-up or interview</label>
+                <input type="text" id="followUpTask" placeholder="e.g. Follow up with Company A" required>
+                <label for="followUpCompany">Company</label>
+                <input type="text" id="followUpCompany" placeholder="Company name" required>
+                <label for="followUpDate">Date to do this</label>
+                <input type="date" id="followUpDate" required>
+                <button type="submit">Add Follow-up</button>
+                <p id="followUpSaveMessage" class="form-message form-message-error" role="status" aria-live="polite"></p>
+            </form>
+            <div id="followUpList" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

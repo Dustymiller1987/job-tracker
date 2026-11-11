@@ -1,0 +1,61 @@
+<<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Profile Settings</title>
+        <link rel="stylesheet" href="../css/style.css">
+        </head>
+        <body>
+            <main class="container">
+                <header class="page-header">
+                    <a class="landing-brand" href="../index.html">JobTracker</a>
+                    <nav class="page-nav" aria-label="Main navigation">
+                        <a href="../index.html">Dashboard</a>
+                        <a href="../add.html">Add application</a>
+                        <a href="../follow-ups.html">Add follow-up</a>
+                        <a href="profile.html" aria-current="page">Profile</a>
+                        <span id="userEmail"></span>
+                        <button class="nav-logout" type="button" onclick="logout()">Logout</button>
+                    </nav>
+                </header>
+
+                <section class="profile-card" aria-labelledby="profileHeading">
+                    <div class="profile-heading">
+                        <p class="profile-eyebrow">Account</p>
+                        <h2 id="profileHeading">Profile settings</h2>
+                        <p>Keep your account details up to date.</p>
+                    </div>
+
+                    <form id="profileForm" class="profile-form">
+                        <div class="field-group">
+                            <label for="profileName">Full name</label>
+                            <input type="text" id="profileName" name="name" placeholder="Full name" autocomplete="name" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="profileEmail">Email</label>
+                            <input type="email" id="profileEmail" name="email" placeholder="Email" autocomplete="email" readonly>
+                        </div>
+                        <button type="submit">Save profile</button>
+                        <p id="profileMessage" role="status" aria-live="polite"></p>
+                    </form>
+
+                    <section class="password-section" aria-labelledby="passwordHeading">
+                        <div>
+                            <h3 id="passwordHeading">Change password</h3>
+                            <p>Choose a new password for your account.</p>
+                        </div>
+                        <div class="field-group">
+                            <label for="newPassword">New password</label>
+                            <input type="password" id="newPassword" autocomplete="new-password" minlength="6" placeholder="At least 6 characters">
+                        </div>
+                        <button id="changePassword" type="button">Update password</button>
+                    </section>
+                </section>
+            </main>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script src="../js/supabase.js"></script>
+        <script src="../js/profile.js"></script>
+
+</body>
+</html>
