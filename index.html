@@ -12,8 +12,8 @@
         <header class="landing-header">
             <a class="landing-brand" href="index.html">JobTracker</a>
             <nav class="landing-nav" aria-label="Account navigation">
-                <a href="login.html">Log in</a>
-                <a class="landing-nav-cta" href="register.html">Create account</a>
+                <a href="pages/login.html">Log in</a>
+                <a class="landing-nav-cta" href="pages/register.html">Create account</a>
             </nav>
         </header>
 
@@ -25,8 +25,8 @@
                 without juggling spreadsheets and sticky notes.
             </p>
             <div class="landing-hero-actions">
-                <a class="landing-primary-button" href="register.html">Get started</a>
-                <a class="landing-secondary-link" href="login.html">Already have an account? Log in</a>
+                <a class="landing-primary-button" href="pages/register.html">Get started</a>
+                <a class="landing-secondary-link" href="pages/login.html">Already have an account? Log in</a>
             </div>
             <div class="landing-proof" aria-label="Dashboard benefits">
                 <span>Applications at a glance</span>
@@ -176,12 +176,12 @@
 
         <footer class="landing-footer">
             <p>One step closer to your next opportunity.</p>
-            <a href="register.html">Create your account</a>
+            <a href="pages/register.html">Create your account</a>
         </footer>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../js/supabase.js"></script>
+    <script src="js/supabase.js"></script>
     <script>
         async function redirectIfLoggedIn() {
             const { data: { user }, error } = await supabaseClient.auth.getUser();
@@ -190,7 +190,7 @@
                 return;
             }
             if (user) {
-                window.location.href = "../index.html";
+                window.location.href = "dashboard.html";
             }
         }
 
