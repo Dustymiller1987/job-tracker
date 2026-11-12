@@ -31,7 +31,28 @@ if (registerForm) {
                 return;
             }
 
-            registerMessage.textContent = "Check your email to confirm your account.";
+            registerMessage.innerHTML = `
+                <div class="success-box">
+                    <h3>✅ Account Created</h3>
+
+                    <p>
+                        We've sent a verification email to
+                        <strong></strong>
+                    </p>
+
+                    <p>
+                        The email will come from our authentication
+                        provider <strong>Supabase</strong>, not
+                        directly from JobTracker.
+                    </p>
+
+                    <p>
+                        Please check your Inbox, Spam, and Junk
+                        folders.
+                    </p>
+                </div>
+            `;
+            registerMessage.querySelector(".success-box p strong").textContent = email;
             registerForm.reset();
         } catch (error) {
             registerMessage.textContent = "Registration failed. Check your connection and try again.";
