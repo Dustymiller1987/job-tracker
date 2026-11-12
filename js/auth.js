@@ -15,14 +15,16 @@ if (registerForm) {
 
         try {
             const { error } = await supabaseClient.auth.signUp({
-                email,
-                password,
-                options: {
-                    data: {
-                        full_name: name
-                    }
-                }
-            });
+    email,
+    password,
+    options: {
+        data: {
+            full_name: name
+        },
+        emailRedirectTo:
+            "https://job-application-trackerdashboard.netlify.app/dashboard.html"
+    }
+});
 
             if (error) {
                 registerMessage.textContent = error.message;
