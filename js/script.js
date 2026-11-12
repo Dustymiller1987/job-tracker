@@ -59,7 +59,7 @@ async function logout() {
         return;
     }
 
-    window.location.href = "pages/landing.html";
+    window.location.href = "index.html";
 }
 const form = document.getElementById("applicationForm");
 const applicationSaveMessage = document.getElementById("applicationSaveMessage");
@@ -454,7 +454,7 @@ if (form) {
             } catch (storageError) {
                 console.error("Application saved to Supabase but could not be cached locally:", storageError);
             }
-            window.location.href = "index.html";
+            window.location.href = "dashboard.html";
         } catch (error) {
             console.error("Error saving application to database:", error);
             const message = error && typeof error.message === "string"
@@ -503,7 +503,7 @@ if (followUpForm) {
         try {
             followUps.push(followUp);
             saveFollowUps();
-            window.location.href = "index.html";
+            window.location.href = "dashboard.html";
         } catch (error) {
             followUps = followUps.filter(item => item.id !== followUp.id);
             console.error("Error saving follow-up:", error);

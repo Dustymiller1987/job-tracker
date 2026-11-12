@@ -62,7 +62,7 @@ if (loginForm) {
                 return;
             }
 
-            window.location.href = "../index.html";
+            window.location.href = "../dashboard.html";
         } catch (error) {
             loginMessage.textContent = "Login failed. Check your connection and try again.";
             console.error("Login failed:", error);
