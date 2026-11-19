@@ -9,7 +9,7 @@
 <body>
     <main class="container">
         <p><a class="button-link" href="dashboard.html">Dashboard</a></p>
-        <section id="applicationDetails" aria-live="polite"></section>
+        <section id="applicationDetails" class="application-details-card" aria-live="polite"></section>
         <form id="statusForm" hidden>
             <label for="applicationStatus">Update status</label>
             <select id="applicationStatus" required>
@@ -21,19 +21,23 @@
                 <option value="Rejected">Rejected</option>
             </select>
             <button type="submit">Update Status</button>
+            <p id="applicationUpdateMessage" class="form-message form-message-error" role="status" aria-live="polite"></p>
         </form>
 
         <section id="interviewHistorySection" hidden>
-            <h2>Interview history</h2>
+            <h2>Application notes</h2>
             <div id="interviewHistory" aria-live="polite"></div>
             <form id="interviewHistoryForm">
-                <label for="interviewNotes">Add interview notes</label>
-                <textarea id="interviewNotes" placeholder="Add interview dates, stages, people you met, and outcomes" required></textarea>
-                <button type="submit">Add to Interview History</button>
+                <label for="interviewNotes">Add a note</label>
+                <textarea id="interviewNotes" placeholder="Add details about this application" required></textarea>
+                <button type="submit">Add Note</button>
+                <p id="interviewNotesMessage" class="form-message form-message-error" role="status" aria-live="polite"></p>
             </form>
         </section>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
     <script src="js/details.js"></script>
 </body>
 </html>

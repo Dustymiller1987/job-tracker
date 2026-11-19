@@ -1,8 +1,8 @@
 body {
     font-family: Arial, sans-serif;
     background:
-        radial-gradient(ellipse at 50% 0%, rgba(213, 232, 251, 0.8), transparent 38rem),
-        linear-gradient(180deg, #f3f7fc 0%, #edf4ff 100%);
+        radial-gradient(ellipse at 50% 0, rgba(213, 232, 251, 0.72), transparent 38rem),
+        #f4f7fb;
     color: #172b45;
     margin: 0;
     padding: 20px;
@@ -11,12 +11,29 @@ body {
 .container {
     max-width: 1100px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.82);
+    background: rgba(255, 255, 255, 0.68);
     padding: 28px;
     border: 1px solid #dfe6ee;
     border-radius: 18px;
     box-shadow: 0 20px 50px rgba(28, 54, 82, 0.08);
     backdrop-filter: blur(3px);
+}
+
+.application-details-card {
+    margin-bottom: 24px;
+    padding: 24px;
+    border: 1px solid #cbdcf0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(234, 242, 251, 0.94), rgba(255, 255, 255, 0.86));
+    box-shadow: 0 10px 24px rgba(28, 54, 82, 0.08);
+}
+
+.application-details-card h1 {
+    margin-top: 0;
+}
+
+.application-details-card p {
+    overflow-wrap: anywhere;
 }
 
 h1 {
@@ -256,9 +273,10 @@ button:hover {
 
 .kanban-board {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(7, minmax(150px, 1fr));
     gap: 16px;
     margin-bottom: 24px;
+    overflow-x: auto;
 }
 
 .kanban-column {
@@ -294,9 +312,36 @@ button:hover {
     font-size: 1rem;
 }
 
+.note-indicator {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: #eaf2fb;
+    color: #145a9e;
+    font-size: 0.72rem;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
 .kanban-card p {
     margin: 4px 0;
     font-size: 0.9rem;
+}
+
+.kanban-move-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 0.82rem;
+}
+
+.kanban-move-select {
+    min-width: 0;
+    margin: 0;
+    padding: 6px;
+    font-size: 0.82rem;
 }
 
 .interview-history {
@@ -915,8 +960,8 @@ body.auth-page {
     justify-content: center;
     padding: 40px 20px;
     background:
-        radial-gradient(ellipse at 50% 0%, rgba(213, 232, 251, 0.8), transparent 38rem),
-        linear-gradient(180deg, #f3f7fc 0%, #edf4ff 100%);
+        radial-gradient(ellipse at 50% 0, rgba(213, 232, 251, 0.72), transparent 38rem),
+        #f4f7fb;
 }
 
 body.auth-page .container {
@@ -925,6 +970,7 @@ body.auth-page .container {
     border-radius: 24px;
     border: 1px solid #dfe6ee;
     box-shadow: 0 20px 50px rgba(28, 54, 82, 0.08);
+    background: rgba(255, 255, 255, 0.68);
 }
 
 .auth-header {
@@ -1174,6 +1220,11 @@ body.auth-page .profile-card button {
         padding: 0 16px;
     }
 
+    .kanban-board:not(.preview-kanban) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        overflow-x: visible;
+    }
+
     .landing-hero {
         padding: 56px 0 42px;
     }
@@ -1204,6 +1255,10 @@ body.auth-page .profile-card button {
 }
 
 @media (max-width: 420px) {
+    .kanban-board:not(.preview-kanban) {
+        grid-template-columns: 1fr;
+    }
+
     .landing-nav {
         gap: 10px;
     }
@@ -1239,4 +1294,13 @@ body.auth-page .profile-card button {
     padding: 10px;
     margin-bottom: 15px;
     box-sizing: border-box;
+}
+.kanban-card {
+    cursor: grab;
+    transition: 0.2s;
+}
+
+.kanban-card:active {
+    cursor: grabbing;
+    opacity: 0.7;
 }

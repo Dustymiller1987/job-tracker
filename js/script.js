@@ -20,6 +20,8 @@ async function checkUser() {
         userEmail.textContent = user.user_metadata?.full_name?.trim() || user.email || "";
     }
 }
+let draggedCardId = null;
+
 const currentUserReady = checkUser();
 let editingid = null;
 function editApplication(id) {
@@ -67,6 +69,7 @@ const applicationsList = document.getElementById("applicationList");
 const applicationCount = document.getElementById("applicationCount");
 const statsContainer = document.getElementById("stats");
 const applicationLoadMessage = document.getElementById("applicationLoadMessage");
+const applicationUpdateMessage = document.getElementById("applicationUpdateMessage");
 const kanbanBoard = document.getElementById("kanbanBoard");
 const followUpForm = document.getElementById("followUpForm");
 const followUpList = document.getElementById("followUpList");
@@ -81,6 +84,49 @@ const kanbanStatuses = [
     "Accepted offer",
     "Rejected"
 ];
+
+function canMoveApplicationToStatus(currentStatus, newStatus) {
+    const currentStage = kanbanStatuses.indexOf(currentStatus);
+    const newStage = kanbanStatuses.indexOf(newStatus);
+
+    if (currentStage < 0 || currentStatus === "Accepted offer" || currentStatus === "Rejected") {
+        return false;
+    }
+
+    return newStatus === "Rejected" || newStage === currentStage + 1;
+}
+
+async function saveBoardApplicationStatus(applicationId, newStatus) {
+    await currentUserReady;
+    if (!currentUser) {
+        throw new Error("You must be logged in to update an application.");
+    }
+
+    const { error } = await supabaseClient
+        .from("applications")
+        .update({ status: newStatus })
+        .eq("id", applicationId)
+        .eq("user_id", currentUser.id)
+        .select("id")
+        .single();
+
+    if (error) {
+        throw error;
+    }
+
+    const application = applications.find(app => String(app.id) === String(applicationId));
+    if (application) {
+        application.status = newStatus;
+        renderApplications();
+        try {
+            saveApplications();
+        } catch (storageError) {
+            console.error("Application status updated but could not be cached locally:", storageError);
+        }
+    }
+
+    await loadApplications();
+}
 
 async function updateApplication(id, application) {
     const { data, error } = await supabaseClient
@@ -243,7 +289,36 @@ function renderKanbanBoard() {
 
         const cards = document.createElement("div");
         cards.classList.add("kanban-cards");
-
+        cards.dataset.status = status;
+        column.addEventListener("dragover", event => {
+            event.preventDefault();
+            if (event.dataTransfer) {
+                event.dataTransfer.dropEffect = "move";
+            }
+        });
+        column.addEventListener("drop", async event => {
+            event.preventDefault();
+            const applicationId = event.dataTransfer?.getData("text/plain") || draggedCardId;
+            if (!applicationId) {
+                return;
+            }
+            const draggedApp = applications.find(app => String(app.id) === applicationId);
+            if (!draggedApp || !canMoveApplicationToStatus(draggedApp.status, status)) {
+                draggedCardId = null;
+                return;
+            }
+            if (draggedApp.status !== status) {
+                try {
+                    applicationUpdateMessage.textContent = "";
+                    await saveBoardApplicationStatus(applicationId, status);
+                } catch (error) {
+                    console.error("Unable to update application status:", error);
+                    applicationUpdateMessage.textContent =
+                        `The application status could not be updated: ${getApplicationUpdateErrorMessage(error)}`;
+                }
+            }
+            draggedCardId = null;
+        });
         if (groupedApps[status].length === 0) {
             const empty = document.createElement("div");
             empty.classList.add("empty-column");
@@ -253,6 +328,17 @@ function renderKanbanBoard() {
             groupedApps[status].forEach(app => {
                 const card = document.createElement("div");
                 card.classList.add("kanban-card");
+                card.dataset.id = app.id;
+                card.dataset.status = app.status;
+                card.draggable = true;
+                card.addEventListener("dragstart", event => {
+                    draggedCardId = event.currentTarget.dataset.id;
+                    event.dataTransfer.effectAllowed = "move";
+                    event.dataTransfer.setData("text/plain", draggedCardId);
+                });
+                card.addEventListener("dragend", () => {
+                    draggedCardId = null;
+                });
                 card.innerHTML = `
                     <h4>${app.company}</h4>
                     <p><strong>Role:</strong> ${app.jobTitle}</p>
@@ -260,11 +346,53 @@ function renderKanbanBoard() {
                     <p><strong>Date applied:</strong> ${app.status === "Interested" ? "N/A" : app.dateApplied || "N/A"}</p>
                     <p>${app.notes || ""}</p>
                     <button type="button" class="view-application">Open application</button>
-                    <button type="button">Delete</button>
+                    <button type="button" class="delete-application">Delete</button>
                 `;
 
+                const nextStatus = kanbanStatuses[kanbanStatuses.indexOf(app.status) + 1];
+                if (app.status !== "Accepted offer" && app.status !== "Rejected") {
+                    const moveLabel = document.createElement("label");
+                    moveLabel.classList.add("kanban-move-label");
+                    moveLabel.textContent = "Move to ";
+
+                    const moveSelect = document.createElement("select");
+                    moveSelect.classList.add("kanban-move-select");
+                    moveSelect.setAttribute("aria-label", `Move ${app.company} to another stage`);
+                    [nextStatus, "Rejected"].filter(Boolean).forEach(next => {
+                        const option = document.createElement("option");
+                        option.value = next;
+                        option.textContent = next;
+                        moveSelect.appendChild(option);
+                    });
+                    moveSelect.addEventListener("change", async () => {
+                        const newStatus = moveSelect.value;
+                        moveSelect.disabled = true;
+                        applicationUpdateMessage.textContent = "";
+                        try {
+                            await saveBoardApplicationStatus(app.id, newStatus);
+                        } catch (error) {
+                            console.error("Unable to update application status:", error);
+                            applicationUpdateMessage.textContent =
+                                `The application status could not be updated: ${getApplicationUpdateErrorMessage(error)}`;
+                            moveSelect.value = nextStatus || "Rejected";
+                        } finally {
+                            moveSelect.disabled = false;
+                        }
+                    });
+                    moveLabel.appendChild(moveSelect);
+                    card.appendChild(moveLabel);
+                }
+
+                if (app.notes?.trim() || app.interviewHistory?.trim()) {
+                    const noteIndicator = document.createElement("span");
+                    noteIndicator.classList.add("note-indicator");
+                    noteIndicator.textContent = "Note added";
+                    noteIndicator.setAttribute("aria-label", "Notes have been added");
+                    card.querySelector("h4").appendChild(noteIndicator);
+                }
+
                 card.querySelector(".view-application").addEventListener("click", () => viewApplication(app.id));
-                const deleteButton = card.querySelector("button:last-child");
+                const deleteButton = card.querySelector(".delete-application");
                 deleteButton.addEventListener("click", () => deleteApplication(app.id));
                 cards.appendChild(card);
             });

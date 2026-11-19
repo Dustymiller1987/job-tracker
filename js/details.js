@@ -1,9 +1,11 @@
 const details = document.getElementById("applicationDetails");
 const statusForm = document.getElementById("statusForm");
 const statusSelect = document.getElementById("applicationStatus");
+const statusMessage = document.getElementById("applicationUpdateMessage");
 const historySection = document.getElementById("interviewHistorySection");
 const historyContainer = document.getElementById("interviewHistory");
 const historyForm = document.getElementById("interviewHistoryForm");
+const historyMessage = document.getElementById("interviewNotesMessage");
 const selectedId = localStorage.getItem("selectedApplicationId");
 const statusStages = [
     "Interested",
@@ -35,16 +37,40 @@ function saveApplicationChanges() {
         localStorage.setItem("applications", JSON.stringify(applications));
         return true;
     } catch (error) {
-        details.textContent = "Your changes could not be saved. Check browser storage and try again.";
+        console.error("Application was updated but could not be cached locally:", error);
         return false;
     }
+}
+
+async function persistApplicationUpdate(update) {
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+    if (authError) {
+        throw authError;
+    }
+    if (!user) {
+        throw new Error("You must be logged in to update this application.");
+    }
+
+    const { data, error } = await supabaseClient
+        .from("applications")
+        .update(update)
+        .eq("id", selectedId)
+        .eq("user_id", user.id)
+        .select("id")
+        .single();
+
+    if (error) {
+        throw error;
+    }
+
+    return data;
 }
 
 function renderHistory() {
     historyContainer.innerHTML = "";
     const history = document.createElement("p");
     history.classList.add("interview-history-text");
-    history.textContent = application.interviewHistory || "No interview history added.";
+    history.textContent = application.notes || application.interviewHistory || "No interview history added.";
     historyContainer.appendChild(history);
 }
 
@@ -97,41 +123,50 @@ if (application) {
     }
 
     const currentStageIndex = statusStages.indexOf(application.status);
-    const startingStageIndex = currentStageIndex === -1 ? 0 : currentStageIndex;
+    const nextStatus = statusStages[currentStageIndex + 1];
     statusSelect.replaceChildren();
-    const availableStatuses = terminalStatuses.includes(application.status)
-        ? [application.status]
-        : statusStages.slice(startingStageIndex);
+    const availableStatuses = currentStageIndex < 0
+        ? ["Interested", "Rejected"]
+        : terminalStatuses.includes(application.status)
+            ? []
+            : [nextStatus, "Rejected"];
     availableStatuses.forEach(status => {
+        if (!status) {
+            return;
+        }
         const option = document.createElement("option");
         option.value = status;
         option.textContent = status;
         statusSelect.appendChild(option);
     });
-    statusSelect.value = statusStages[startingStageIndex];
-    statusForm.hidden = false;
+    statusForm.hidden = availableStatuses.length === 0;
+    if (!statusForm.hidden) {
+        statusSelect.value = nextStatus || availableStatuses[0];
+    }
     historySection.hidden = false;
     renderHistory();
 
-    statusForm.addEventListener("submit", event => {
+    statusForm.addEventListener("submit", async event => {
         event.preventDefault();
-        const selectedStageIndex = statusStages.indexOf(statusSelect.value);
-        const savedStageIndex = statusStages.indexOf(application.status);
-        const cannotChangeTerminalOutcome = terminalStatuses.includes(application.status)
-            && statusSelect.value !== application.status;
-        if (selectedStageIndex < Math.max(savedStageIndex, 0) || cannotChangeTerminalOutcome) {
-            statusSelect.setCustomValidity("You cannot move an application to an earlier stage.");
-            statusSelect.reportValidity();
-            return;
-        }
-        statusSelect.setCustomValidity("");
-        application.status = statusSelect.value;
-        if (saveApplicationChanges()) {
-            window.location.reload();
+        const updatedStatus = statusSelect.value;
+        const submitButton = statusForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        statusMessage.textContent = "";
+        try {
+            await persistApplicationUpdate({ status: updatedStatus });
+            application.status = updatedStatus;
+            saveApplicationChanges();
+            window.location.href = "dashboard.html";
+        } catch (error) {
+            console.error("Unable to update application status:", error);
+            statusMessage.textContent =
+                `The application status could not be updated: ${getApplicationUpdateErrorMessage(error)}`;
+        } finally {
+            submitButton.disabled = false;
         }
     });
 
-    historyForm.addEventListener("submit", event => {
+    historyForm.addEventListener("submit", async event => {
         event.preventDefault();
         const notes = document.getElementById("interviewNotes").value.trim();
         if (!notes) {
@@ -139,13 +174,29 @@ if (application) {
         }
 
         const entry = `${new Date().toLocaleDateString()}: ${notes}`;
-        application.interviewHistory = application.interviewHistory
-            ? `${application.interviewHistory}\n\n${entry}`
+        const existingNotes = application.notes || application.interviewHistory || "";
+        const updatedNotes = existingNotes
+            ? `${existingNotes}\n\n${entry}`
             : entry;
-
-        if (saveApplicationChanges()) {
+        const submitButton = historyForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        historyMessage.textContent = "";
+        try {
+            await persistApplicationUpdate({ notes: updatedNotes });
+            application.notes = updatedNotes;
+            application.interviewHistory = updatedNotes;
+            const cached = saveApplicationChanges();
             renderHistory();
             historyForm.reset();
+            if (!cached) {
+                historyMessage.textContent = "The notes were saved to your account but could not be cached in this browser.";
+            }
+        } catch (error) {
+            console.error("Unable to save interview notes:", error);
+            historyMessage.textContent =
+                `Application note could not be saved: ${getApplicationUpdateErrorMessage(error)}`;
+        } finally {
+            submitButton.disabled = false;
         }
     });
 } else if (!details.textContent) {
