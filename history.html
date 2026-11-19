@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application History</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="container">
+        <header class="page-header">
+            <a class="landing-brand" href="dashboard.html">JobTracker</a>
+            <nav class="page-nav" aria-label="Main navigation">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="add.html">Add application</a>
+                <a href="follow-ups.html">Add follow-up</a>
+                <a href="history.html" aria-current="page">History</a>
+                <a href="pages/profile.html">Profile</a>
+                <span id="userEmail"></span>
+                <button class="nav-logout" type="button" onclick="logout()">Logout</button>
+            </nav>
+        </header>
+
+        <section aria-labelledby="historyHeading">
+            <h1 id="historyHeading" class="page-title">Application history</h1>
+            <p>Archived applications are stored here.</p>
+            <p id="historyMessage" class="application-load-message" role="status" aria-live="polite"></p>
+            <div id="historyList" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/history.js"></script>
+</body>
+</html>

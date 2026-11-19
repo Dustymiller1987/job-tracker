@@ -346,7 +346,7 @@ function renderKanbanBoard() {
                     <p><strong>Date applied:</strong> ${app.status === "Interested" ? "N/A" : app.dateApplied || "N/A"}</p>
                     <p>${app.notes || ""}</p>
                     <button type="button" class="view-application">Open application</button>
-                    <button type="button" class="delete-application">Delete</button>
+                    <button type="button" class="delete-application">Archive</button>
                 `;
 
                 const nextStatus = kanbanStatuses[kanbanStatuses.indexOf(app.status) + 1];
@@ -393,7 +393,7 @@ function renderKanbanBoard() {
 
                 card.querySelector(".view-application").addEventListener("click", () => viewApplication(app.id));
                 const deleteButton = card.querySelector(".delete-application");
-                deleteButton.addEventListener("click", () => deleteApplication(app.id));
+                deleteButton.addEventListener("click", () => archiveApplication(app.id));
                 cards.appendChild(card);
             });
         }
@@ -436,13 +436,13 @@ function renderApplications() {
                 Open application
             </button>
             <button type="button" data-index="${index}">
-                Delete
+                Archive
             </button>
         `;
 
         div.querySelector(".view-application").addEventListener("click", () => viewApplication(app.id));
         const deleteButton = div.querySelector("[data-index]");
-        deleteButton.addEventListener("click", () => deleteApplication(app.id));
+        deleteButton.addEventListener("click", () => archiveApplication(app.id));
         applicationsList.appendChild(div);
     });
 }
@@ -457,7 +457,8 @@ async function loadApplications() {
     const { data, error } = await supabaseClient
         .from("applications")
         .select("*")
-        .eq("user_id", currentUser.id);
+        .eq("user_id", currentUser.id)
+        .or("archived.is.null,archived.eq.false");
 
     if (error) {
         console.error("Error loading applications from database:", error);
@@ -491,7 +492,7 @@ async function loadApplications() {
     }
 }
 
-async function deleteApplication(id) {
+async function archiveApplication(id) {
     await currentUserReady;
 
     if (!currentUser) {
@@ -499,22 +500,39 @@ async function deleteApplication(id) {
         return;
     }
 
-    if (!confirm("Delete this application?")) {
+    if (!confirm("Move this application to History? You can restore it later.")) {
         return;
+    }
+
+    if (applicationUpdateMessage) {
+        applicationUpdateMessage.textContent = "";
     }
 
     const { error } = await supabaseClient
         .from("applications")
-        .delete()
+        .update({
+            archived: true,
+            archived_date: new Date().toISOString()
+        })
         .eq("id", id)
-        .eq("user_id", currentUser.id);
+        .eq("user_id", currentUser.id)
+        .select("id")
+        .single();
 
     if (error) {
-        console.error("Error deleting application:", error);
-        alert(`The application could not be deleted: ${error.message}`);
+        console.error("Unable to archive application:", error);
+        const message = `The application could not be moved to History: ${getApplicationUpdateErrorMessage(error)}`;
+        if (applicationUpdateMessage) {
+            applicationUpdateMessage.textContent = message;
+        } else {
+            alert(message);
+        }
         return;
     }
 
+    if (applicationUpdateMessage) {
+        applicationUpdateMessage.textContent = "Application moved to History.";
+    }
     await loadApplications();
 }
 
