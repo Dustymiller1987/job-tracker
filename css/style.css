@@ -1304,3 +1304,25 @@ body.auth-page .profile-card button {
     cursor: grabbing;
     opacity: 0.7;
 }
+
+/* Shared card surfaces across every page */
+.application-details-card,
+.dashboard-summary,
+.stat-card,
+.follow-up-section,
+.follow-up-card,
+.kanban-column,
+.kanban-card,
+.application-card,
+.preview-card,
+.dashboard-preview,
+.landing-preview,
+.profile-card,
+.profile-form,
+.password-section,
+.auth-form {
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(234, 242, 251, 0.78));
+    border-color: #d7e2ef;
+    box-shadow: 0 10px 28px rgba(28, 54, 82, 0.08);
+}
